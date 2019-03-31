@@ -1,8 +1,8 @@
-./PSCH-20181012/psch/20181012/*.fits
-./PSCH-20181012/psch/20181012/phot
-./PSCH-20181012/psch/20181012/reg
-./PSCH-20181012/psch/20181012/astrom
-./rc80/2019-02-05
-./rc80/2019-02-06/*.fit
-./rc80/2019-02-06/reg/*fits
-./rc80/2019-02-06/astrom
+PSCH-20181012/psch/20181012/*.fits
+PSCH-20181012/psch/20181012/phot
+PSCH-20181012/psch/20181012/reg
+PSCH-20181012/psch/20181012/astrom
+rc80/2019-02-05
+rc80/2019-02-06/*.fit
+rc80/2019-02-06/reg/*fits
+rc80/2019-02-06/astrom
