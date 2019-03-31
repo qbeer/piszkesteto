@@ -7,7 +7,7 @@
 \geometry{a4paper,
 		     tmargin = 35mm, 
 		     lmargin = 30mm,
-		     rmargin = 30mm,
+		     rmargin = 33mm,
 		     bmargin = 30mm}
 \usepackage{mathtools}
 \usepackage{amsmath}
@@ -55,13 +55,13 @@ in different sizes. It is the biggest facility in Hungary that is capable of
 making astronomical measurements. The observatory due to its location and the size of the telescopes
 is mostly able to see brighter objects but on these long-term measurements can
 be executed. Photometric and spectrographic measurements are being done during our
-stay and even new CCD chips have been deployed to one of the telescopes.
+stay and even new CCD camera has been deployed to one of the telescopes.
 
 \subsection{CCDs}
 
 \par CCDs are semiconductor devices that are highly effective in capturing most of the
 incoming light and converting photons to electrons. The conversion rate is called
-quantum effectivity (QE) which is very high in CCDs and pretty low in digital cameras.
+quantum effectivity (QE) which is very high in CCDs.
 Not only do they work effectively but also they have linear response - called gain - which
 is basically the number of resulting electrons per photon.
 
@@ -95,7 +95,7 @@ designed for the analysis and processing of CCD images.
 
 \subsection{Photometry analysis of XX Cyg cepheid}
 
-\par We were given archive images of a pulsar called \textbf{XX Cyg} and we did the preprocessing steps with the above mentioned package.
+\par We were given archive images of a star called \textbf{XX Cyg} and we did the preprocessing steps with the above mentioned package.
 After the images were pre-processed we run some scripts with \textit{fitsh} to find stars over a given pixel-threshold ($10000$) then we
 used one of the measurements as reference image. This was necessary as the different images were taken in a period of time and
 the field of view was rotated and shifted during the process. The last step was to transform these images into the same view.
@@ -119,14 +119,13 @@ the field of view was rotated and shifted during the process. The last step was 
 
 \vspace{0.5cm}
 
-\par We also had a program that visualized stars and with this we were able to select our star
-and the start to that we compared it with. This can be seen in the plot below:
+\par We also had a program that visualized stars and with this we were able to select the target
+and the stars that we compared it with. This can be seen in the plot below:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{../PSCH-20181012/psch/20181012/withStars.png}
     \caption{The target and comapring stars (XX Cyg and comp1-6)}
-    \label{fig:jd}
 \end{figure}
 
 \par We then extracted the photometric data with \textit{fitsh} and created plots
@@ -138,6 +137,7 @@ they do not vary a lot compared to each other.
     \centering
     \includegraphics[width=0.75\textwidth]{../PSCH-20181012/psch/20181012/mag-jd.png}
     \caption{Magnitude difference with each comapring star given the Julian date of images}
+    \label{fig:jd}
 \end{figure}
 
 \begin{figure}[H]
@@ -146,17 +146,17 @@ they do not vary a lot compared to each other.
     \caption{Magnitude difference of some comparing stars given Julian date}
 \end{figure}
 
-\par These measurements were done with the Schmidt-telescope in 2018/10/12. The periodic time of
+\par These measurements were done with the Schmidt-telescope in 2018/10/12. The period of
 XX Cyg is approximately $3~h$ and $14~min$ which is $\approx 0.14$ JD. Given \ref{fig:jd} it can be seen that the frame
 is $0.16$ JD and it seemingly shows around 1 period.
 
-\subsection{RGB image from RC-80 image filters}
+\subsection{RGB image from RC-80 images}
 
-\par We also got images taken on 2019/02/06 on which we did the preprocessing steps and used the
-r, g, B filters on images of galaxy M51. We then uploaded these images to a site \footnote{http://nova.astrometry.net/upload}
-in order to fill the header files with the appropriate celestial coordinates. These were needed for the
+\par We also got images taken on 2019/02/06 on which we did the preprocessing steps and used images taken in
+r, g, B filters of galaxy M51. We then uploaded these images to a site \footnote{http://nova.astrometry.net/upload}
+in order to transform them to the WCS. These were needed for the
 python $aplpy$ package which used $astropy$ to correctly make an RGB image from the corrected r, g, B 
-filters. After hours of unsuccessful tries we finally were able to create a pretty RGB image 
+frames. After hours of unsuccessful tries we finally were able to create a pretty RGB image 
 of the galaxy.
 
 \vspace{0.6cm}
@@ -169,7 +169,7 @@ of the galaxy.
 
 \newpage
 
-\section{Conclusion}
+\section{ Conclusion}
 
 \par We had a nice weekend at Piszkéstető. We got acquainted with the
 experiments that are being done here and also we were shown how to process
