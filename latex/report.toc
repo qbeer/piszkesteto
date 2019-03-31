@@ -1,0 +1,9 @@
+\babel@toc {UKenglish}{}
+\contentsline {section}{\numberline {I.}Introduction}{2}{section.1}
+\contentsline {subsection}{\numberline {I.1.}About Piszk\IeC {\'e}stet\IeC {\H o}}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {I.2.}CCDs}{2}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {I.2..1}Image pre-processing}{2}{subsubsection.1.2.1}
+\contentsline {section}{\numberline {II.}Measurements}{3}{section.2}
+\contentsline {subsection}{\numberline {II.1.}Photometry analysis of XX Cyg cepheid}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {II.2.}RGB image from RC-80 image filters}{5}{subsection.2.2}
+\contentsline {section}{\numberline {III.}Conclusion}{7}{section.3}

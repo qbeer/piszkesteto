@@ -1,0 +1,168 @@
+#!/bin/bash
+
+CX=1
+CY=2
+CL=0
+LF=""
+
+RAD=4
+COLOR="green"
+LCOLOR="red"
+IN=
+
+IS_DELETE=
+
+SHAPE=circle
+
+function print_error()
+{
+ echo "Error: $*." >/dev/stderr
+}
+
+while [ -n "$1" ] ; do
+    case "$1" in 
+	-x|--col-xy)
+		CC=($(echo $2 | tr "," " "))
+		CX=${CC[0]}
+		CY=${CC[1]}
+		( test $CX -gt 0 -a $CY -gt 0 &>/dev/null ) || \
+		 {	print_error "invalid column format: '$2'"
+			exit 1;
+		 }
+		shift
+		;;
+	-l|--col-label)
+		CL=$2
+		( test $CL -gt 0 &>/dev/null ) || \
+		 {	print_error "invalid label column: '$2'" 
+			exit 1;
+		 }
+		shift
+		;;
+	-f|--label)
+		LF="$2"
+		shift
+		;;
+	-r|--radius|-s|--size)
+		RAD=$2
+		#( test $RAD -gt 0 &>/dev/null ) || \
+		# {	print_error "invalid radius or size: '$2'" 
+		#	exit 1;
+		# }
+		shift
+		;;
+	-c|--color|--colour)
+		[ -n "$2" ] || 
+		 {	print_error "invalid color: '$2'"
+			exit 1;
+		 }
+		COLOR=$2
+		shift
+		;;
+	-a|--label-color|--label-colour)
+		[ -n "$2" ] || 
+		 {	print_error "invalid color: '$2'"
+			exit 1;
+		 }
+		LCOLOR=$2
+		shift
+		;;
+	-d|--delete)
+		IS_DELETE=1
+		;;
+	--circle|-i)
+		SHAPE=circle
+		;;
+	--box|--square|-q)
+		SHAPE=square
+		;;
+	--help)
+		echo -e "Usage:\ttvmark [<input>] [-x|--col-xy <>,<>] "
+		echo -e	"\t[-l|--col-label <> | -f|--label '...']"
+		echo -e "\t[--circle|--square] [-r|--radius|-s|--size <r>] "
+		echo -e "\t[-c|--color <c>] [-a|--label-color <c>]"
+		echo -e "\t[-d|--delete] [-h|--help]"
+		echo -e "Notes:"
+		echo -e " - in the label string, \$<N> is replaced by the content of the <N>th column"
+		echo -e "   (like in AWK)"
+		exit 0
+		;;
+	-*)
+		print_error "invalid command line argument near '$1'"
+		exit 1
+		;;
+	*)
+		[ -n "$IN" ] &&
+		 {	print_error "input file has been specified yet"
+			exit 1;
+		 }
+		IN=$1
+		;;
+    esac ; shift
+done
+
+for p in ds9 xpaset ; do
+	[ -n `which $p` ] ||
+	 {	print_error "program $p is not available, exiting" 
+		exit 1;
+	 }
+done
+
+if [ -n "$IS_DELETE" ] ; then
+	xpaset ds9 regions delete all </dev/null 2>/dev/null || \
+	 {	print_error "xpaset failed (maybe ds9 is not running)"
+		exit 1;
+	 }
+	exit 0
+fi
+
+[ -n "$IN" ] && { [ -f "$IN" ] || \
+ {	print_error "file '$IN' not exists" 
+	exit 1;
+ }; }
+
+if [ ! -n "$IN" -o "$IN" == "-" ] ; then
+	TMP=`mktemp`
+	cat $IN >$TMP
+	IN="$TMP"
+else
+	TMP=""
+fi
+
+(	echo "global color=$COLOR" 
+	echo "image"
+	case $SHAPE in 
+	    square)
+		cat $IN | awk -v CX=$CX -v CY=$CY -v RAD=$RAD \
+		'!/^#/{ printf ("box(%g,%g,%g,%g)\n",$(CX)+0.5,$(CY)+0.5,RAD,RAD); }'
+		;;
+	    circle|*)
+		cat $IN | awk -v CX=$CX -v CY=$CY -v RAD=$RAD \
+		'!/^#/{ printf ("circle(%g,%g,%g)\n",$(CX)+0.5,$(CY)+0.5,RAD); }'
+		;;
+	esac	
+
+	if [ $CL -gt 0 ] || [ -n "$LF" ] ; then
+		echo "global color=$LCOLOR" 
+		cat $IN | awk -v CX=$CX -v CY=$CY -v CL=$CL -v LF="$LF" -v RAD=$RAD \
+		'!/^#/{  
+			if ( LF != "" )
+			 {	f=LF;
+				for ( i=NF ; i>=1 ; i-- )
+				 {	r=sprintf("\\$%d",i);
+					gsub(r,$(i),f);
+				 }
+				printf("text(%g,%g,\"%s\")\n",$(CX),$(CY)-RAD/2-10,f);
+			 }
+			else if ( CL>0 )
+				printf("text(%g,%g,\"%s\")\n",$(CX),$(CY)-RAD/2-10,$(CL));
+		}' 
+	fi
+
+) | xpaset ds9 regions 2>/dev/null || \
+ {	print_error "xpaset failed (maybe ds9 is not running)"
+	exit 1;
+ }
+
+test -n "$TMP" && rm -f "$TMP"
+
